@@ -34,3 +34,5 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+//https://blog.naver.com/capbang93/222651992612
