@@ -45,6 +45,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean checkUserIdDuplicate(String userId) {
         Member member = memberRepository.findByUserId(userId);
+        System.out.println(member);
         if(member!=null){
             return false;
         } else {

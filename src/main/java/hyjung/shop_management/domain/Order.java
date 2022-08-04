@@ -9,9 +9,9 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Table(name = "orders")
 public class Order {
     @Id @GeneratedValue
     @Column(name = "order_id")
@@ -25,6 +25,15 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    public Order(Member member, OrderItem... orderItems) {
+        this.orderDate = LocalDateTime.now();
+        this.member = member;
+        for (OrderItem orderItem : orderItems) {
+            orderItem.setOrder(this);
+            this.orderItems.add(orderItem);
+        }
+    }
 
     public void setMember(Member member){
         this.member = member;

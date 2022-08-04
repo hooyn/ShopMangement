@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Item {
@@ -16,18 +15,24 @@ public class Item {
 
     private String name;
     private Integer price;
-    private Integer quantity;
+    private Integer stockQuantity;
+
+    public Item(String name, Integer price, Integer stockQuantity) {
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+    }
 
     public void addQuantity(int count){
-        this.quantity += count;
+        this.stockQuantity += count;
     }
 
     public boolean subQuantity(int count){
-        int result = this.quantity - count;
+        int result = this.stockQuantity - count;
         if(result<0){
             return false;
         } else{
-            this.quantity -= count;
+            this.stockQuantity -= count;
             return true;
         }
     }

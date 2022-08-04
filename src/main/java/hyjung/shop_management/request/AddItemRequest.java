@@ -6,5 +6,5 @@ import lombok.Getter;
 public class AddItemRequest {
     private String name;
     private Integer price;
-    private Integer quantity;
+    private Integer stockQuantity;
 }

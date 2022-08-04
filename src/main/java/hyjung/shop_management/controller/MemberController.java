@@ -7,7 +7,6 @@ import hyjung.shop_management.response.ApiResponse;
 import hyjung.shop_management.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,12 +30,8 @@ public class MemberController {
         if(!userId.isBlank() && !userPw.isBlank() && !username.isBlank()){
             boolean checkUserIdDuplicate = memberService.checkUserIdDuplicate(userId);
 
-            if(!checkUserIdDuplicate){
-                Member member = Member.builder()
-                        .userId(userId)
-                        .userPw(userPw)
-                        .username(username)
-                        .build();
+            if(checkUserIdDuplicate){
+                Member member = new Member(userId, userPw, username);
 
                 Long id = memberService.saveMember(member);
                 return new ApiResponse(true, HttpStatus.OK.value(), id, "회원이 등록되었습니다.");

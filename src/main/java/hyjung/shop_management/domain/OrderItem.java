@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class OrderItem {
@@ -15,6 +14,7 @@ public class OrderItem {
     @Column(name = "order_item_id")
     private Long id;
 
+    @Column(name = "order_price")
     private Integer orderPrice;
     private Integer count;
 
@@ -25,6 +25,12 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
+
+    public OrderItem(Integer orderPrice, Integer count, Item item) {
+        this.orderPrice = orderPrice;
+        this.count = count;
+        this.item = item;
+    }
 
     public void setOrder(Order order){
         this.order = order;

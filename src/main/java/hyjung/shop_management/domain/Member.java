@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Member {
@@ -17,12 +16,20 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
+    @Column(name = "user_id")
     private String userId;
+    @Column(name = "user_pw")
     private String userPw;
     private String username;
 
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
+
+    public Member(String userId, String userPw, String username) {
+        this.userId = userId;
+        this.userPw = userPw;
+        this.username = username;
+    }
 
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.userPw = passwordEncoder.encode(userPw);

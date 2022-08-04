@@ -1,7 +1,6 @@
 package hyjung.shop_management.controller;
 
 import hyjung.shop_management.domain.Item;
-import hyjung.shop_management.domain.Member;
 import hyjung.shop_management.dto.ItemDto;
 import hyjung.shop_management.request.AddItemRequest;
 import hyjung.shop_management.response.ApiResponse;
@@ -24,15 +23,11 @@ public class ItemController {
     @PostMapping("/api/item")
     public ApiResponse AddItem(@RequestBody AddItemRequest request){
         String name = request.getName();
-        Integer quantity = request.getQuantity();
+        Integer stockQuantity = request.getStockQuantity();
         Integer price = request.getPrice();
 
-        if(!name.isBlank() && quantity!=null && price!=null){
-            Item build = Item.builder()
-                    .name(name)
-                    .quantity(quantity)
-                    .price(price)
-                    .build();
+        if(!name.isBlank() && stockQuantity!=null && price!=null){
+            Item build = new Item(name, price, stockQuantity);
 
             Long id = itemService.saveItem(build);
             return new ApiResponse(true, HttpStatus.OK.value(), id, "아이템이 등록되었습니다.");
@@ -46,7 +41,7 @@ public class ItemController {
         List<Item> item = itemService.findItemAll();
 
         List<ItemDto> data = item.stream().map(i -> {
-            return new ItemDto(i.getId(), i.getName(), i.getPrice(), i.getQuantity());
+            return new ItemDto(i.getId(), i.getName(), i.getPrice(), i.getStockQuantity());
         }).collect(Collectors.toList());
 
         return new ApiResponse(true, HttpStatus.OK.value(), data, "아이템이 조회되었습니다.");
