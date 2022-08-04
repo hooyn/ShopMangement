@@ -38,8 +38,8 @@ public class MemberController {
                         .username(username)
                         .build();
 
-                memberService.saveMember(member);
-                return new ApiResponse(true, HttpStatus.OK.value(), null, "회원이 등록되었습니다.");
+                Long id = memberService.saveMember(member);
+                return new ApiResponse(true, HttpStatus.OK.value(), id, "회원이 등록되었습니다.");
             } else {
                 return new ApiResponse(false, HttpStatus.BAD_REQUEST.value(), null, "아이디가 이미 사용중입니다.");
             }
