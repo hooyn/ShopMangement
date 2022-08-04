@@ -15,8 +15,9 @@ public class ItemRepositoryImpl implements ItemRepository{
     private final EntityManager em;
 
     @Override
-    public void save(Item item) {
+    public Long save(Item item) {
         em.persist(item);
+        return item.getId();
     }
 
     @Override

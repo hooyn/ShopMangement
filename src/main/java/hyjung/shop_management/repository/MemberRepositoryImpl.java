@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 @Repository
@@ -15,8 +16,9 @@ public class MemberRepositoryImpl implements MemberRepository{
 
 
     @Override
-    public void save(Member member) {
+    public Long save(Member member) {
         em.persist(member);
+        return member.getId();
     }
 
     @Override
@@ -26,8 +28,13 @@ public class MemberRepositoryImpl implements MemberRepository{
 
     @Override
     public Member findByUserId(String userId) {
-        return em.createQuery("select m from Member m where m.userId =: userId", Member.class)
-                .getSingleResult();
+        try{
+            return em.createQuery("select m from Member m where m.userId =: userId", Member.class)
+                    .setParameter("userId",userId)
+                    .getSingleResult();
+        } catch (NoResultException e){
+            return null;
+        }
     }
 
     @Override

@@ -5,13 +5,9 @@ import hyjung.shop_management.domain.Order;
 import java.util.List;
 
 public interface OrderRepository {
-    void save(Order item);
+    Long save(Order order);
 
-    Item findById(Long id);
+    Order findById(Long id);
 
-    List<Item> findAll();
+    List<Order> findAll();
 }
-
-안녕하세
-
-980911 안녕하세요 저는ㅇ 정ㅎㅇㅋㅋ ㅂㅋㅋ

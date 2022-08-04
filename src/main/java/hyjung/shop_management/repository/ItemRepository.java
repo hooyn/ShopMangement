@@ -6,7 +6,7 @@ import hyjung.shop_management.domain.Member;
 import java.util.List;
 
 public interface ItemRepository {
-    void save(Item item);
+    Long save(Item item);
 
     Item findById(Long id);
 

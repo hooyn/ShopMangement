@@ -1,8 +1,10 @@
 package hyjung.shop_management.domain;
 
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,5 +22,13 @@ public class Member {
     private String username;
 
     @OneToMany(mappedBy = "member")
-    private List<Order> orders;
+    private List<Order> orders = new ArrayList<>();
+
+    public void encodePassword(PasswordEncoder passwordEncoder){
+        this.userPw = passwordEncoder.encode(userPw);
+    }
+
+    public boolean matchPassword(PasswordEncoder passwordEncoder, String password){
+        return passwordEncoder.matches(password, getUserPw());
+    }
 }
