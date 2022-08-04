@@ -28,6 +28,5 @@ public class OrderItem {
 
     public void setOrder(Order order){
         this.order = order;
-        order.getOrderItems().add(this);
     }
 }
