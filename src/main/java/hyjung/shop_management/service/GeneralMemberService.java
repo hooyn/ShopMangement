@@ -11,7 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,14 +84,55 @@ public class GeneralMemberService implements MemberService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public ApiResponse login(String userId, String userPw) {
-        Member member = memberRepository.findByUserId(userId);
+        Member member;
+        try{
+            member = memberRepository.findByUserId(userId);
+        } catch (Exception e){
+            member = null;
+        }
+        if(member==null){
+            return new ApiResponse(false, HttpStatus.NOT_ACCEPTABLE.value(), null, "등록되어 있지 않은 아이디 입니다.");
+
+        }
         if(!passwordEncoder.matches(userPw, member.getUserPw())){
             return new ApiResponse(false, HttpStatus.NOT_ACCEPTABLE.value(), null, "비밀번호가 틀렸습니다.");
 
         }
 
-        return new ApiResponse(true, HttpStatus.OK.value(), jwtTokenProvider.createToken(userId), "로그인에 성공하였습니다.");
+        Map<String, String> map = new HashMap<>();
+        map.put("id", String.valueOf(member.getId()));
+        map.put("token", jwtTokenProvider.createToken(userId));
+        map.put("refreshToken", jwtTokenProvider.createRefreshToken());
+
+        String refreshToken = map.get("refreshToken");
+        member.changeRefreshToken(refreshToken);
+        return new ApiResponse(true, HttpStatus.OK.value(), map, "로그인에 성공하였습니다.");
     }
+
+    @Override
+    @Transactional
+    public ApiResponse reIssue(String userId, String refreshToken) {
+        Member member;
+        try{
+            member = memberRepository.findByUserId(userId);
+        } catch (Exception e){
+            return new ApiResponse(false, HttpStatus.NOT_ACCEPTABLE.value(), null, "등록되어 있지 않은 아이디 입니다.");
+        }
+
+        if(member.getRefreshToken()!=null && member.getRefreshToken()==refreshToken){
+            Map<String, String> map = new HashMap<>();
+            map.put("id", String.valueOf(member.getId()));
+            map.put("token", jwtTokenProvider.createToken(userId));
+            map.put("refreshToken", jwtTokenProvider.createRefreshToken());
+            
+            member.changeRefreshToken(map.get("refreshToken"));
+            return new ApiResponse(true, HttpStatus.OK.value(), map, "리프레시 토큰 업데이트가 성공적입니다.");
+        } else {
+            return new ApiResponse(false, HttpStatus.NOT_ACCEPTABLE.value(), null, "저장되어있는 토큰이 없습니다.");
+        }
+    }
+
+
 }

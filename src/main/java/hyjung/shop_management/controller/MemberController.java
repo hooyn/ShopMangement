@@ -34,4 +34,6 @@ public class MemberController {
     public ApiResponse selectMemberAll(){
         return memberService.findMemberAll();
     }
+
+
 }

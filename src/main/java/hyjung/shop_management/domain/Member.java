@@ -26,6 +26,8 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String refreshToken;
+
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 
@@ -34,6 +36,7 @@ public class Member {
         this.userPw = userPw;
         this.username = username;
         this.role = Role.ROLE_MEMBER;
+        this.refreshToken = null;
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder){
@@ -42,5 +45,9 @@ public class Member {
 
     public boolean matchPassword(PasswordEncoder passwordEncoder, String password){
         return passwordEncoder.matches(password, getUserPw());
+    }
+
+    public void changeRefreshToken(String token){
+        this.refreshToken = token;
     }
 }

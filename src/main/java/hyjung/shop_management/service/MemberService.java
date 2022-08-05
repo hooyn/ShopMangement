@@ -18,4 +18,6 @@ public interface MemberService {
     boolean checkUserIdDuplicate(String userId);
 
     ApiResponse login(String userId, String userPw);
+
+    ApiResponse reIssue(String userId, String refreshToken);
 }

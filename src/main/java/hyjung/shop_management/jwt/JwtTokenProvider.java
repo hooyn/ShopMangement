@@ -19,6 +19,8 @@ public class JwtTokenProvider {
     @Value("${spring.jwt.secretKey}")
     private String secretKey;
     private Long ExpiredTime = 1000L * 30;
+    private Long RefreshTime = 1000L * 60;
+
     private SignatureAlgorithm algorithm = SignatureAlgorithm.HS256;
 
     private final UserDetailsService memberDetailService;
@@ -31,6 +33,16 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime()+ExpiredTime))
+                .signWith(algorithm, secretKey)
+                .compact();
+    }
+
+    public String createRefreshToken(){
+        Date now = new Date();
+
+        return Jwts.builder()
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime()+RefreshTime))
                 .signWith(algorithm, secretKey)
                 .compact();
     }
