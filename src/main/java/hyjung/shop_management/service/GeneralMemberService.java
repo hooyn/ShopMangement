@@ -2,6 +2,7 @@ package hyjung.shop_management.service;
 
 import hyjung.shop_management.domain.Member;
 import hyjung.shop_management.dto.MemberDto;
+import hyjung.shop_management.jwt.JwtTokenProvider;
 import hyjung.shop_management.repository.MemberRepository;
 import hyjung.shop_management.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,9 @@ public class GeneralMemberService implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
+
     @Override
     @Transactional
     public ApiResponse saveMember(String userId, String userPw, String username) {
@@ -30,6 +34,7 @@ public class GeneralMemberService implements MemberService {
                 Member member = new Member(userId, userPw, username);
                 member.encodePassword(passwordEncoder);
                 Long id = memberRepository.save(member);
+
                 return new ApiResponse(true, HttpStatus.OK.value(), id, "회원이 등록되었습니다.");
             } else {
                 return new ApiResponse(false, HttpStatus.BAD_REQUEST.value(), null, "아이디가 이미 사용중입니다.");
@@ -53,7 +58,6 @@ public class GeneralMemberService implements MemberService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public ApiResponse findMemberAll() {
         List<Member> member = memberRepository.findAll();
 
@@ -64,6 +68,8 @@ public class GeneralMemberService implements MemberService {
         return new ApiResponse(true, HttpStatus.OK.value(), data, "모든 회원이 조회되었습니다.");
     }
 
+
+
     @Override
     public boolean checkUserIdDuplicate(String userId) {
         Member member = memberRepository.findByUserId(userId);
@@ -73,5 +79,17 @@ public class GeneralMemberService implements MemberService {
         } else {
             return true;
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponse login(String userId, String userPw) {
+        Member member = memberRepository.findByUserId(userId);
+        if(!passwordEncoder.matches(userPw, member.getUserPw())){
+            return new ApiResponse(false, HttpStatus.NOT_ACCEPTABLE.value(), null, "비밀번호가 틀렸습니다.");
+
+        }
+
+        return new ApiResponse(true, HttpStatus.OK.value(), jwtTokenProvider.createToken(userId), "로그인에 성공하였습니다.");
     }
 }

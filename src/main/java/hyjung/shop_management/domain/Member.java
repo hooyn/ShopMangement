@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -12,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Member {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
@@ -22,6 +23,9 @@ public class Member {
     private String userPw;
     private String username;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 
@@ -29,6 +33,7 @@ public class Member {
         this.userId = userId;
         this.userPw = userPw;
         this.username = username;
+        this.role = Role.ROLE_MEMBER;
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder){

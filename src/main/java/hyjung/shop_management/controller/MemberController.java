@@ -1,6 +1,7 @@
 package hyjung.shop_management.controller;
 
 import hyjung.shop_management.request.JoinRequest;
+import hyjung.shop_management.request.LoginRequest;
 import hyjung.shop_management.response.ApiResponse;
 import hyjung.shop_management.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,11 @@ public class MemberController {
         String username = request.getUsername();
 
         return memberService.saveMember(userId, userPw, username);
+    }
+
+    @PostMapping("/login")
+    public ApiResponse login(@RequestBody LoginRequest request){
+        return memberService.login(request.getUserId(), request.getUserPw());
     }
 
     @GetMapping("/api/user")

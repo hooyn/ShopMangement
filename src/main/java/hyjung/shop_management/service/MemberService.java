@@ -2,8 +2,8 @@ package hyjung.shop_management.service;
 
 import hyjung.shop_management.domain.Member;
 import hyjung.shop_management.response.ApiResponse;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 public interface MemberService {
 
@@ -16,4 +16,6 @@ public interface MemberService {
     ApiResponse findMemberAll();
 
     boolean checkUserIdDuplicate(String userId);
+
+    ApiResponse login(String userId, String userPw);
 }
