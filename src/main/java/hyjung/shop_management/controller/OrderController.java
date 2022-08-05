@@ -2,7 +2,7 @@ package hyjung.shop_management.controller;
 
 import hyjung.shop_management.request.OrderItemRequest;
 import hyjung.shop_management.response.ApiResponse;
-import hyjung.shop_management.service.OrderService;
+import hyjung.shop_management.service.inner.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

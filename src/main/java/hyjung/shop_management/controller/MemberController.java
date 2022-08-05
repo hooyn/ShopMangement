@@ -3,7 +3,7 @@ package hyjung.shop_management.controller;
 import hyjung.shop_management.request.JoinRequest;
 import hyjung.shop_management.request.LoginRequest;
 import hyjung.shop_management.response.ApiResponse;
-import hyjung.shop_management.service.MemberService;
+import hyjung.shop_management.service.inner.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

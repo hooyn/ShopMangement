@@ -1,4 +1,4 @@
-package hyjung.shop_management.repository;
+package hyjung.shop_management.repository.impl;
 
 import hyjung.shop_management.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -10,23 +10,23 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class MemberRepositoryImpl implements MemberRepository{
+public class MemberRepositoryImpl{
 
     private final EntityManager em;
 
 
-    @Override
+    //@Override
     public Long save(Member member) {
         em.persist(member);
         return member.getId();
     }
 
-    @Override
+    //@Override
     public Member findById(Long id) {
         return em.find(Member.class, id);
     }
 
-    @Override
+    //@Override
     public Member findByUserId(String userId) {
         try{
             return em.createQuery("select m from Member m where m.userId =: userId", Member.class)
@@ -37,7 +37,7 @@ public class MemberRepositoryImpl implements MemberRepository{
         }
     }
 
-    @Override
+    //@Override
     public List<Member> findAll() {
         return em.createQuery("select m from Member m", Member.class)
                 .getResultList();

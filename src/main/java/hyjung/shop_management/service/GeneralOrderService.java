@@ -10,17 +10,19 @@ import hyjung.shop_management.repository.ItemRepository;
 import hyjung.shop_management.repository.MemberRepository;
 import hyjung.shop_management.repository.OrderRepository;
 import hyjung.shop_management.response.ApiResponse;
+import hyjung.shop_management.service.inner.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class GeneralOrderService implements OrderService{
+public class GeneralOrderService implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
@@ -31,18 +33,19 @@ public class GeneralOrderService implements OrderService{
     @Transactional
     public ApiResponse saveOrder(Long member_id, Long item_id, Integer count) {
         if(member_id!=null && item_id!=null && count!=null){
-            Member member = memberRepository.findById(member_id);
-            if(member!=null){
-                Item item = itemRepository.findById(item_id);
-                if(item!=null){
-                    if(item.getStockQuantity()>0){
-                        boolean check = item.subQuantity(count);
+
+            Optional<Member> member = memberRepository.findById(member_id);
+            if(!member.equals(Optional.empty())){
+                Optional<Item> item = itemRepository.findById(item_id);
+                if(!item.equals(Optional.empty())){
+                    if(item.get().getStockQuantity()>0){
+                        boolean check = item.get().subQuantity(count);
                         if(check){
-                            OrderItem orderItem = new OrderItem(item.getPrice()*count, count, item);
-                            Order order = new Order(member, orderItem);
+                            OrderItem orderItem = new OrderItem(item.get().getPrice()*count, count, item.get());
+                            Order order = new Order(member.get(), orderItem);
 
                             order.addOrderItem(orderItem);
-                            Long id = orderRepository.save(order);
+                            Long id = orderRepository.save(order).getId();
                             return new ApiResponse(true, HttpStatus.OK.value(), id, "주문이 접수되었습니다.");
                         } else {
                             return new ApiResponse(false, HttpStatus.NOT_FOUND.value(), null, "아이템의 재고가 없습니다.");
@@ -63,7 +66,7 @@ public class GeneralOrderService implements OrderService{
 
     @Override
     @Transactional(readOnly = true)
-    public Order findOrderById(Long orderId) {
+    public Optional<Order> findOrderById(Long orderId) {
         return orderRepository.findById(orderId);
     }
 
@@ -90,8 +93,7 @@ public class GeneralOrderService implements OrderService{
     public ApiResponse findOrderByToken(String token) {
         String userId = jwtTokenProvider.getUserId(token);
 
-        List<Order> byUserId = orderRepository.findByUserId(userId);
+        List<Order> byUserId = orderRepository.findOrderByUserId(userId);
         return new ApiResponse(true, HttpStatus.OK.value(), byUserId, "사용자별 주문 내역을 조회 하였습니다.");
-
     }
 }

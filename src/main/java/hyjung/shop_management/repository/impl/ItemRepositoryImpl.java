@@ -1,4 +1,4 @@
-package hyjung.shop_management.repository;
+package hyjung.shop_management.repository.impl;
 
 import hyjung.shop_management.domain.Item;
 import hyjung.shop_management.domain.Member;
@@ -10,22 +10,22 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class ItemRepositoryImpl implements ItemRepository{
+public class ItemRepositoryImpl{
 
     private final EntityManager em;
 
-    @Override
+    //@Override
     public Long save(Item item) {
         em.persist(item);
         return item.getId();
     }
 
-    @Override
+    //@Override
     public Item findById(Long id) {
         return em.find(Item.class, id);
     }
 
-    @Override
+    //@Override
     public List<Item> findAll() {
         return em.createQuery("select i from Item i", Item.class)
                 .getResultList();

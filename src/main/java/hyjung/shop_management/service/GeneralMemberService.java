@@ -5,6 +5,7 @@ import hyjung.shop_management.dto.MemberDto;
 import hyjung.shop_management.jwt.JwtTokenProvider;
 import hyjung.shop_management.repository.MemberRepository;
 import hyjung.shop_management.response.ApiResponse;
+import hyjung.shop_management.service.inner.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +37,7 @@ public class GeneralMemberService implements MemberService {
             if(checkUserIdDuplicate){
                 Member member = new Member(userId, userPw, username);
                 member.encodePassword(passwordEncoder);
-                Long id = memberRepository.save(member);
+                Long id = memberRepository.save(member).getId();
 
                 return new ApiResponse(true, HttpStatus.OK.value(), id, "회원이 등록되었습니다.");
             } else {
@@ -49,7 +51,7 @@ public class GeneralMemberService implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public Member findMemberById(Long memberId) {
+    public Optional<Member> findMemberById(Long memberId) {
         return memberRepository.findById(memberId);
     }
 

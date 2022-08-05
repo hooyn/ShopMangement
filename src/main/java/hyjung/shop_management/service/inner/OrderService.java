@@ -1,15 +1,15 @@
-package hyjung.shop_management.service;
+package hyjung.shop_management.service.inner;
 
 import hyjung.shop_management.domain.Order;
 import hyjung.shop_management.response.ApiResponse;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface OrderService {
 
     ApiResponse saveOrder(Long member_id, Long item_id, Integer count);
 
-    Order findOrderById(Long orderId);
+    Optional<Order> findOrderById(Long orderId);
 
     ApiResponse findOrderAll();
 

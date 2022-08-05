@@ -1,15 +1,16 @@
-package hyjung.shop_management.service;
+package hyjung.shop_management.service.inner;
 
 import hyjung.shop_management.domain.Member;
 import hyjung.shop_management.response.ApiResponse;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 
 public interface MemberService {
 
     ApiResponse saveMember(String userId, String userPw, String username);
 
-    Member findMemberById(Long memberId);
+    Optional<Member> findMemberById(Long memberId);
 
     Member findMemberByUserId(String userId);
 

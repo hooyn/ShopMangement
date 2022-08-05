@@ -1,15 +1,15 @@
-package hyjung.shop_management.service;
+package hyjung.shop_management.service.inner;
 
 import hyjung.shop_management.domain.Item;
 import hyjung.shop_management.response.ApiResponse;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface ItemService {
 
     ApiResponse saveItem(String name, Integer stockQuantity, Integer price);
 
-    Item findItemById(Long itemId);
+    Optional<Item> findItemById(Long itemId);
 
     ApiResponse findItemAll();
 }

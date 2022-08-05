@@ -18,8 +18,8 @@ import java.util.Date;
 public class JwtTokenProvider {
     @Value("${spring.jwt.secretKey}")
     private String secretKey;
-    private Long ExpiredTime = 1000L * 30;
-    private Long RefreshTime = 1000L * 60;
+    private Long ExpiredTime = 1000L * 60 * 15;
+    private Long RefreshTime = 1000L * 60 * 60 * 24 * 7;
 
     private SignatureAlgorithm algorithm = SignatureAlgorithm.HS256;
 
