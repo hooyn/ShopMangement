@@ -29,4 +29,11 @@ public class OrderRepositoryImpl implements OrderRepository{
         return em.createQuery("select o from Order o", Order.class)
                 .getResultList();
     }
+
+    @Override
+    public List<Order> findByUserId(String userId) {
+        return em.createQuery("select o from Order o where o.member.userId =: userId", Order.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
 }

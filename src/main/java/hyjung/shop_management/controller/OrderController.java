@@ -4,10 +4,7 @@ import hyjung.shop_management.request.OrderItemRequest;
 import hyjung.shop_management.response.ApiResponse;
 import hyjung.shop_management.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +20,13 @@ public class OrderController {
         return orderService.saveOrder(member_id, item_id, count);
     }
 
-
     @GetMapping("/api/order")
     public ApiResponse selectOrderAll(){
         return orderService.findOrderAll();
+    }
+
+    @GetMapping("/api/token")
+    public ApiResponse selectOrderToken(@RequestHeader(value = "Authorization") String token){
+        return orderService.findOrderByToken(token);
     }
 }

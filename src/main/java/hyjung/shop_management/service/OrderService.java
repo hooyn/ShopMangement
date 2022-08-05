@@ -12,4 +12,6 @@ public interface OrderService {
     Order findOrderById(Long orderId);
 
     ApiResponse findOrderAll();
+
+    ApiResponse findOrderByToken(String token);
 }

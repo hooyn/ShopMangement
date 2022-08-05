@@ -5,6 +5,7 @@ import hyjung.shop_management.domain.Member;
 import hyjung.shop_management.domain.Order;
 import hyjung.shop_management.domain.OrderItem;
 import hyjung.shop_management.dto.OrderDto;
+import hyjung.shop_management.jwt.JwtTokenProvider;
 import hyjung.shop_management.repository.ItemRepository;
 import hyjung.shop_management.repository.MemberRepository;
 import hyjung.shop_management.repository.OrderRepository;
@@ -24,6 +25,7 @@ public class GeneralOrderService implements OrderService{
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     @Transactional
@@ -82,5 +84,14 @@ public class GeneralOrderService implements OrderService{
         }).collect(Collectors.toList());
 
         return new ApiResponse(true, HttpStatus.OK.value(), data, "주문 내역을 조회 하였습니다.");
+    }
+
+    @Override
+    public ApiResponse findOrderByToken(String token) {
+        String userId = jwtTokenProvider.getUserId(token);
+
+        List<Order> byUserId = orderRepository.findByUserId(userId);
+        return new ApiResponse(true, HttpStatus.OK.value(), byUserId, "사용자별 주문 내역을 조회 하였습니다.");
+
     }
 }
