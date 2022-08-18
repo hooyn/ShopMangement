@@ -1,12 +1,10 @@
 package hyjung.shop_management.config;
 
-import hyjung.shop_management.jwt.FormAuthenticationProvider;
 import hyjung.shop_management.jwt.JwtAuthenticationFilter;
 import hyjung.shop_management.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -32,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                //JWTAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 등록을 해줍니다.
     }
 
     @Bean
@@ -39,9 +38,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    // Custom AuthenticationProvider 빈 설정
+    /*
+    [NOT_USE]
+    Custom AuthenticationProvider 빈 설정 -> 인증에 대한 일을 시킬 AuthenticationProvider 커스텀하여 등록
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         return new FormAuthenticationProvider();
     }
+    */
+
 }
