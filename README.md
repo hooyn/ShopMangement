@@ -5,3 +5,4 @@
 ##### MySQL 사용
 ##### JWT 토큰 사용하여 인증을 통한 기능 사용
 ##### Spring Data JPA 를 이용해서 리포지토리 구현
+##### Swagger 사용하여 API 자동 문서화
